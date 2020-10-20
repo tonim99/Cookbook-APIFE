@@ -1,26 +1,39 @@
+import { findAllByDisplayValue } from '@testing-library/react';
 import React from 'react';
-import logo from './logo.svg';
+import { Route, Link, Switch } from "react-router-dom"
 import './App.css';
-
+import Display from "./Display"
 function App() {
+  const url ="http://localhost:4000/api"
+
+  const [authors, setAuthors] = React.useState([])
+
+  React.useEffect(() => {
+    const getAuthors = () => {
+      fetch(url + "/authors/")
+        .then((response) => response.json())
+        .then((data) => { setAuthors(data) })
+     }
+    getAuthors()
+   }, []
+ )
+    
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Switch>
+        <Route 
+          exact
+          path='/'
+          render={(rp) => (
+            <Display 
+              {...rp}
+              authors={authors}
+            />
+          )}
+        />
+      </Switch>
     </div>
   );
 }
 
-export default App;
+export default App
